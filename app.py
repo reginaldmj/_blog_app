@@ -28,7 +28,9 @@ def load_user(user_id):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    posts = Post.query.all()
+
+    return render_template('index.html', posts=posts)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -97,6 +99,48 @@ def create_post():
         return redirect(url_for('home'))
 
     return render_template('create_post.html', form=form)
+
+@app.route('/edit-post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.author != current_user:
+        flash('Unauthorized action')
+        return redirect(url_for('home'))
+
+    form = PostForm()
+
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+
+        db.session.commit()
+
+        flash('Post updated successfully')
+
+        return redirect(url_for('home'))
+
+    form.title.data = post.title
+    form.content.data = post.content
+
+    return render_template('create_post.html', form=form)
+
+@app.route('/delete-post/<int:post_id>')
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.author != current_user:
+        flash('Unauthorized action')
+        return redirect(url_for('home'))
+
+    db.session.delete(post)
+    db.session.commit()
+
+    flash('Post deleted successfully')
+
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)

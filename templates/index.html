@@ -2,8 +2,22 @@
 
 {% block content %}
 
-<h1>Welcome to My Blog</h1>
+<h1>Blog Posts</h1>
 
-<p>My first Flask blog project.</p>
+{% for post in posts %}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h3>{{ post.title }}</h3>
+
+        <p>{{ post.content }}</p>
+
+        <small>
+            Created by {{ post.author.username }}
+        </small>
+    </div>
+</div>
+
+{% endfor %}
 
 {% endblock %}
