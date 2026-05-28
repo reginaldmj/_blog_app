@@ -2,24 +2,51 @@
 
 {% block content %}
 
-<h2>Create Post</h2>
+<div class="row justify-content-center">
 
-<form method="POST">
+    <div class="col-md-8">
 
-    {{ form.hidden_tag() }}
+        <div class="card shadow p-4">
 
-    <div class="mb-3">
-        {{ form.title.label }}
-        {{ form.title(class="form-control") }}
+            <h2 class="mb-4">
+                Create Post
+            </h2>
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+
+                    {{ form.title.label(class="form-label") }}
+
+                    {{ form.title(
+                        class="form-control",
+                        placeholder="Post title"
+                    ) }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    {{ form.content.label(class="form-label") }}
+
+                    {{ form.content(
+                        class="form-control",
+                        rows="10",
+                        placeholder="Write your blog post..."
+                    ) }}
+
+                </div>
+
+                {{ form.submit(class="btn btn-primary") }}
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        {{ form.content.label }}
-        {{ form.content(class="form-control", rows="8") }}
-    </div>
-
-    {{ form.submit(class="btn btn-primary") }}
-
-</form>
+</div>
 
 {% endblock %}
